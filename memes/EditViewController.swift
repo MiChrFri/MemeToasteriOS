@@ -5,14 +5,15 @@ enum LabelPosition {
 }
 
 class EditViewController: UIViewController, UITextViewDelegate {
-    private let memeImage: UIImage!
+    private let meme: Meme!
+    
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
     
     private let imageView = UIImageView(frame: CGRect.zero)
     
-    init(withImage image: UIImage) {
-        self.memeImage = image
+    init(withMeme meme: Meme) {
+        self.meme = meme
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,7 +36,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
     }
     
     private func addImageView() {
-        imageView.image = memeImage
+        imageView.image = meme.image
         imageView.isUserInteractionEnabled = true
         view.addSubview(imageView)
         
@@ -61,14 +62,17 @@ class EditViewController: UIViewController, UITextViewDelegate {
         let textView = UITextView(frame: CGRect.zero)
         textView.delegate = self
         
-        let attributes: [NSAttributedStringKey : Any] = [
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeWidth.rawValue):  -3.0,
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeColor.rawValue): UIColor.black,
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white
-        ]
+        if let txt = position == .top ? meme.topText : meme.bottomText {
+            let attributes: [NSAttributedStringKey : Any] = [
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeWidth.rawValue):  -3.0,
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeColor.rawValue): UIColor.black,
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white
+            ]
+            
+            let attrStr = NSAttributedString(string: txt, attributes: attributes)
+            textView.attributedText = attrStr
+        }
         
-        let topAttrStr = NSAttributedString(string: "your text", attributes: attributes)
-        textView.attributedText = topAttrStr
         textView.textAlignment = .center
         textView.backgroundColor = UIColor.clear
         textView.textColor = UIColor.white
@@ -87,10 +91,8 @@ class EditViewController: UIViewController, UITextViewDelegate {
         textView.widthAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         
         switch position {
-            case .top:
-                textView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
-            case .bottom:
-                textView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
+            case .top: textView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+            case .bottom: textView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
         }
         
         return textView
@@ -113,7 +115,14 @@ extension EditViewController {
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {
         view.endEditing(true)
-        let meme = Meme(image: memeImage, topText: topTextView?.text ?? "your text", bottomText: bottomTextView?.text ?? "your text")
+        
+        if let topText = topTextView?.text {
+            meme.topText = topText
+        }
+        
+        if let bottomText = bottomTextView?.text {
+            meme.bottomText = bottomText
+        }
     }
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
@@ -130,6 +139,11 @@ extension EditViewController {
     
     internal func textViewDidBeginEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        
+        if meme.topText == "your text" || meme.bottomText == "your text" {
+            textView.text = nil
+        }
+    
     }
     
     internal func textViewDidEndEditing(_ textView: UITextView) {

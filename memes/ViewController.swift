@@ -7,7 +7,8 @@ class ViewController: UIViewController {
     let imagePickerViewController = ImagePickerViewController()
     
     var imagePaths:[String] = []
-    var pickedImg: [UIImage] = []
+//    var pickedImg: [UIImage] = []
+    var memes: [Meme] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +65,8 @@ class ViewController: UIViewController {
 extension ViewController: ImagePickerDelegate {
     func pickedImage(image: UIImage?) {
         if let img = image {
-            self.pickedImg.append(img)
+            let meme = Meme(image: img)
+            self.memes.append(meme)
             self.collectionView.reloadSections([0])
         }
     }
@@ -72,12 +74,12 @@ extension ViewController: ImagePickerDelegate {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pickedImg.count
+        return memes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
-        if let img = pickedImg[safe: indexPath.row] {
+        if let img = memes[safe: indexPath.row]?.image {
             cell.composeView(withImage: img)
         }
         
@@ -85,7 +87,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let editViewController = EditViewController(withImage: pickedImg[indexPath.row])
+        let editViewController = EditViewController(withMeme: memes[indexPath.row])
         self.navigationController?.pushViewController(editViewController, animated: true)
     }
     
