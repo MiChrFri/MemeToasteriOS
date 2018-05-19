@@ -6,10 +6,8 @@ enum LabelPosition {
 
 class EditViewController: UIViewController, UITextViewDelegate {
     private let meme: Meme!
-    
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
-    
     private let imageView = UIImageView(frame: CGRect.zero)
     
     init(withMeme meme: Meme) {
@@ -41,7 +39,8 @@ class EditViewController: UIViewController, UITextViewDelegate {
         view.addSubview(imageView)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: topPadding).isActive = true
+        
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: view.frame.width).isActive = true
@@ -123,7 +122,13 @@ extension EditViewController {
         if let bottomText = bottomTextView?.text {
             meme.bottomText = bottomText
         }
+        
+//        let dataStore = DataStore()
+//        
+//        let success = dataStore.saveImage(image: meme.image)
+//        print("SUCCESS?: \(success)")
     }
+    
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if let error = error {
@@ -143,7 +148,6 @@ extension EditViewController {
         if meme.topText == "your text" || meme.bottomText == "your text" {
             textView.text = nil
         }
-    
     }
     
     internal func textViewDidEndEditing(_ textView: UITextView) {
@@ -163,16 +167,6 @@ extension EditViewController {
             static let opacity:Float = 0.3
         }
     }
-    
-    final var topPadding: CGFloat {
-        get {
-            let navBarHeight = navigationController?.navigationBar.frame.size.height ?? 44.0
-            let statsBarHeight = UIApplication.shared.statusBarFrame.height
-            
-            return navBarHeight + statsBarHeight
-        }
-    }
-    
 }
 
 

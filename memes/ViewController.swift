@@ -3,42 +3,58 @@ import UIKit
 class ViewController: UIViewController {    
     let memeCellId = "cvcid"
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    
-    let imagePickerViewController = ImagePickerViewController()
+    let imageProvider = ImageProvider()
     
     var imagePaths:[String] = []
-//    var pickedImg: [UIImage] = []
     var memes: [Meme] = []
+    let dataStore = DataStore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        addCollectionView()
-        showImagePicker()
-        imagePickerViewController.delegate = self
         
-        self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(barButtonItemClicked)), animated: true)
+        memes = dataStore.loadMemesWithImages()
+        
+        addCollectionView()
+        
+        self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showImagePicker)), animated: true)
     }
     
-    @objc func barButtonItemClicked() {
-        showImagePicker()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        
+        DispatchQueue.global(qos: .background).async {
+            let userDefaults = UserDefaults.standard
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.memes)
+            userDefaults.set(encodedData, forKey: "memes")
+            userDefaults.synchronize()
+            DispatchQueue.main.async {
+                self.collectionView.reloadSections([0])
+            }
+        }
     }
-    
+
     private func setupView() {
         self.title = "Memes Galery"
-        self.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
     }
     
-    private func showImagePicker() {
-        navigationController?.pushViewController(imagePickerViewController, animated: true)
+    @objc private func showImagePicker() {
+        let imagePicker = UIAlertController(title: "Select an Image", message: nil, preferredStyle: .actionSheet)
+        
+        imagePicker.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        imagePicker.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
+            self.presentImagePicker(withType: .camera)
+        }))
+        imagePicker.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
+            self.presentImagePicker(withType: .photoLibrary)
+        }))
+        
+        self.present(imagePicker, animated: true, completion: nil)
     }
     
-    private final var topPadding: CGFloat {
-        get {
-            let navBarHeight = navigationController?.navigationBar.frame.size.height ?? 44.0
-            let statsBarHeight = UIApplication.shared.statusBarFrame.height
-            
-            return navBarHeight + statsBarHeight
+    private func presentImagePicker(withType type: UIImagePickerControllerSourceType) {
+        if let imagePicker = self.imageProvider.pickerController(from: type ) {
+            imagePicker.delegate = self
+            self.present(imagePicker, animated: false)
         }
     }
     
@@ -57,17 +73,21 @@ class ViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: topPadding).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
-}
-
-extension ViewController: ImagePickerDelegate {
+    
     func pickedImage(image: UIImage?) {
         if let img = image {
-            let meme = Meme(image: img)
-            self.memes.append(meme)
+            let imageName = "image_\(memes.count).png"
+            let meme = Meme(imageName: imageName)
+            meme.image = img
+
+            self.memes.insert(meme, at: 0)
             self.collectionView.reloadSections([0])
+
+            dataStore.saveImage(image: img, forName: imageName)
+            dataStore.saveMemes(self.memes)
         }
     }
 }
@@ -79,8 +99,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
-        if let img = memes[safe: indexPath.row]?.image {
-            cell.composeView(withImage: img)
+        if let meme = memes[safe: indexPath.row] {
+            cell.composeView(withMeme: meme)
         }
         
         return cell
@@ -102,5 +122,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+}
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {dismiss(animated:false, completion:nil); return }
+        
+        let imageData = UIImageJPEGRepresentation(pickedImage, 0.6)
+        dismiss(animated:false, completion: { () in
+            self.pickedImage(image: UIImage(data: imageData!))
+        })
     }
 }
