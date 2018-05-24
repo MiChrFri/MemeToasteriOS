@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         collectionView.setCollectionViewLayout(layout, animated: true)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        collectionView.backgroundColor = Colors.background
         collectionView.contentInset = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
         self.view.addSubview(collectionView)
   

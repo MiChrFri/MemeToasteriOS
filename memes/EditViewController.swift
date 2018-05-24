@@ -22,6 +22,9 @@ class EditViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = Colors.background
+        view.tintColor = Colors.buttonText
+        
         setupNavigationBar()
         addImageView()
         self.topTextView = addTextView(at: .top)
