@@ -80,6 +80,7 @@ class MemeView: UIView, UITextViewDelegate {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.font = Fonts.main
         textView.isEditable = true
+        textView.autocapitalizationType = .allCharacters
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = true
         textView.sizeToFit()

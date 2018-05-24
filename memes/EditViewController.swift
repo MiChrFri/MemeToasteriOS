@@ -108,8 +108,6 @@ extension EditViewController {
         
         UIGraphicsEndImageContext()
         UIImageWriteToSavedPhotosAlbum(image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-        
-        //self.bottomTextView.font = UIFont(name: (self.bottomTextView.font?.fontName)!, size: Fonts.size)
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {
@@ -122,11 +120,6 @@ extension EditViewController {
         if let bottomText = bottomTextView?.text {
             meme.bottomText = bottomText
         }
-        
-//        let dataStore = DataStore()
-//        
-//        let success = dataStore.saveImage(image: meme.image)
-//        print("SUCCESS?: \(success)")
     }
     
     
@@ -142,7 +135,7 @@ extension EditViewController {
         }
     }
     
-    internal func textViewDidBeginEditing(_ textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
         if meme.topText == "your text" || meme.bottomText == "your text" {
@@ -150,7 +143,15 @@ extension EditViewController {
         }
     }
     
-    internal func textViewDidEndEditing(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.autocapitalizationType != .allCharacters {
+            textView.autocapitalizationType = .allCharacters
+            textView.resignFirstResponder()
+            textView.becomeFirstResponder()
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.clear
     }
 }

@@ -41,5 +41,10 @@
 	<string>Our application needs permission to write photos...</string>
 	<key>NSCameraUsageDescription</key>
 	<string>The application needs permission to use the camera...</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>LeagueGothic-CondensedRegular</string>
+		<string>LeagueGothic-Regular</string>
+	</array>
 </dict>
 </plist>
