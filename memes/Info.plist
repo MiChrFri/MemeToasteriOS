@@ -28,7 +28,6 @@
 	<string>Our application needs permission to write photos...</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>LeagueGothic-CondensedRegular</string>
 		<string>LeagueGothic-Regular</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

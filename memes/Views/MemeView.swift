@@ -26,7 +26,6 @@ class MemeView: UIView, UITextViewDelegate {
     
         imageView.isUserInteractionEnabled = editable
         self.addSubview(imageView)
-        self.backgroundColor = UIColor.blue
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true

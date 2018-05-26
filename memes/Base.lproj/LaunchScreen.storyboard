@@ -23,21 +23,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MEME TOASTER" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GYb-Sx-djk">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.94868355989456177" green="0.6534159779548645" blue="0.29005348682403564" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <color key="tintColor" red="0.9529411793" green="0.68627452850000004" blue="0.13333334029999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="LeagueGothic-Regular" family="League Gothic" pointSize="80"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="TUP-1f-R7o">
+                                <rect key="frame" x="112" y="188" width="150" height="150"/>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Loading ..." textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TlP-6b-0zU">
+                                <rect key="frame" x="164.5" y="330" width="46" height="18"/>
+                                <color key="textColor" white="0.82973868317074251" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="LeagueGothic-Regular" family="League Gothic" pointSize="15"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="GYb-Sx-djk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="2iO-te-NcY"/>
-                            <constraint firstItem="GYb-Sx-djk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="dBu-Nt-lQg"/>
-                            <constraint firstAttribute="trailing" secondItem="GYb-Sx-djk" secondAttribute="trailing" id="hhq-FK-uN5"/>
-                            <constraint firstItem="GYb-Sx-djk" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="xG7-Y5-SJy"/>
+                            <constraint firstItem="TlP-6b-0zU" firstAttribute="bottom" secondItem="TUP-1f-R7o" secondAttribute="bottom" constant="10" id="6xr-1q-CqY"/>
+                            <constraint firstItem="TlP-6b-0zU" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="g5b-m7-ezA"/>
+                            <constraint firstItem="TUP-1f-R7o" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="168" id="qAa-Ex-nyx"/>
+                            <constraint firstItem="TUP-1f-R7o" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="zOV-dA-iCE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -47,4 +48,7 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Icon" width="150" height="150"/>
+    </resources>
 </document>

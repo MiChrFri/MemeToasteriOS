@@ -1,7 +1,8 @@
 import UIKit
 
 class ViewController: UIViewController {    
-    let memeCellId = "cvcid"
+    let memeCellId = "memecCellId"
+    let noMemeCellId = "noMemecCellId"
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     let imageProvider = ImageProvider()
     
@@ -11,6 +12,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Memes Galery"
         
         memes = dataStore.loadMemesWithImages()
         
@@ -32,23 +34,20 @@ class ViewController: UIViewController {
             }
         }
     }
-
-    private func setupView() {
-        self.title = "Memes Galery"
-    }
     
     @objc private func showImagePicker() {
-        let imagePicker = UIAlertController(title: "Select an Image", message: nil, preferredStyle: .actionSheet)
+        let imagePickerAlert = UIAlertController(title: "Select an Image", message: nil, preferredStyle: .actionSheet)
         
-        imagePicker.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
-        imagePicker.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
+        imagePickerAlert.view.tintColor = Colors.buttonText
+        imagePickerAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        imagePickerAlert.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
             self.presentImagePicker(withType: .camera)
         }))
-        imagePicker.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
+        imagePickerAlert.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
             self.presentImagePicker(withType: .photoLibrary)
         }))
         
-        self.present(imagePicker, animated: true, completion: nil)
+        self.present(imagePickerAlert, animated: true, completion: nil)
     }
     
     private func presentImagePicker(withType type: UIImagePickerControllerSourceType) {
@@ -60,6 +59,7 @@ class ViewController: UIViewController {
     
     func addCollectionView() {
         collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: memeCellId)
+        collectionView.register(NoMemeCollectionViewCell.self, forCellWithReuseIdentifier: noMemeCellId)
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
@@ -94,19 +94,28 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return memes.count
+        return memes.count > 0 ? memes.count : 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
-        if let meme = memes[safe: indexPath.row] {
-            cell.composeView(withMeme: meme)
+
+        if memes.count > 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
+            
+            if let meme = memes[safe: indexPath.row] {
+                cell.composeView(withMeme: meme)
+            }
+            return cell
+            
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noMemeCellId, for: indexPath) as! NoMemeCollectionViewCell
+            cell.composeView()
+            return cell
         }
-        
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard memes.count > 0 else { return }
         let editViewController = EditViewController(withMeme: memes[indexPath.row])
         self.navigationController?.pushViewController(editViewController, animated: true)
     }
