@@ -17,6 +17,7 @@ class ViewController: UIViewController {
         memes = dataStore.loadMemesWithImages()
         
         addCollectionView()
+        setupLayout()
         
         self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showImagePicker)), animated: true)
     }
@@ -59,7 +60,6 @@ class ViewController: UIViewController {
     
     func addCollectionView() {
         collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: memeCellId)
-        collectionView.register(NoMemeCollectionViewCell.self, forCellWithReuseIdentifier: noMemeCellId)
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
@@ -67,9 +67,12 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = Colors.background
+        
         collectionView.contentInset = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
         self.view.addSubview(collectionView)
-  
+    }
+    
+    private func setupLayout() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
@@ -79,14 +82,31 @@ class ViewController: UIViewController {
     
     func pickedImage(image: UIImage?) {
         if let img = image {
-            let imageName = "image_\(memes.count).png"
-            let meme = Meme(imageName: imageName)
+            
+            // TODO: Unique meme id
+            let memeId = String(memes.count)
+            
+            let imageName = "image_\(memeId).png"
+            let thumbName = "thumbnail_\(memeId).png"
+            let meme = Meme(id: memeId)
             meme.image = img
+//            meme.thumbnail = img
 
             self.memes.insert(meme, at: 0)
             self.collectionView.reloadSections([0])
 
             dataStore.saveImage(image: img, forName: imageName)
+            
+            
+            let thumbGenerator = ThumbGenerator()
+            
+            let imgData: CFData = UIImagePNGRepresentation(img) as! CFData
+            let imgSource = CGImageSourceCreateWithData(imgData, nil)
+            
+            let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: CGSize(width: 50, height: 50))
+            
+            dataStore.saveImage(image: thumb!, forName: thumbName)
+            meme.thumbnail = thumb!
             dataStore.saveMemes(self.memes)
         }
     }
@@ -94,28 +114,28 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return memes.count > 0 ? memes.count : 1
+        if memes.count == 0 {
+            let bgImage = UIImageView();
+            bgImage.image = UIImage(named: "noImages");
+            bgImage.contentMode = .scaleAspectFit
+            collectionView.backgroundView = bgImage
+        } else {
+            collectionView.backgroundView = nil
+        }
+        
+        return memes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        if memes.count > 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
-            
-            if let meme = memes[safe: indexPath.row] {
-                cell.composeView(withMeme: meme)
-            }
-            return cell
-            
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noMemeCellId, for: indexPath) as! NoMemeCollectionViewCell
-            cell.composeView()
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
+        
+        if let meme = memes[safe: indexPath.row] {
+            cell.composeView(withMeme: meme)
         }
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard memes.count > 0 else { return }
         let editViewController = EditViewController(withMeme: memes[indexPath.row])
         self.navigationController?.pushViewController(editViewController, animated: true)
     }

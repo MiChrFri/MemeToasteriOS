@@ -5,6 +5,7 @@ enum LabelPosition {
 }
 
 class EditViewController: UIViewController, UITextViewDelegate {
+    private let dataStore = DataStore()
     private let meme: Meme!
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
@@ -21,15 +22,6 @@ class EditViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        for family: String in UIFont.familyNames
-        {
-            print("\(family)")
-            for names: String in UIFont.fontNames(forFamilyName: family)
-            {
-                print("== \(names)")
-            }
-        }
 
         view.backgroundColor = Colors.background
         view.tintColor = Colors.buttonText
@@ -113,13 +105,13 @@ class EditViewController: UIViewController, UITextViewDelegate {
 // HANDLERS
 extension EditViewController {
     @objc func barButtonItemClicked() {
-        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, UIScreen.main.scale)
-        let context = UIGraphicsGetCurrentContext()
-        imageView.layer.render(in: context!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
         
-        UIGraphicsEndImageContext()
-        UIImageWriteToSavedPhotosAlbum(image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        let newSize = CGSize(width: imageView.frame.size.width-80.0, height: imageView.frame.size.height-80.0)
+
+        let image = imageView.render(toSize: newSize)
+        
+        dataStore.saveImage(image: image, forName: "thumb_\(meme.id ?? "").png")
+        meme.thumbnail = image
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {

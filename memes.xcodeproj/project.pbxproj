@@ -8,15 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		7911E94120A7206100B024F2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94020A7206100B024F2 /* EditViewController.swift */; };
-		7911E94320A976CC00B024F2 /* Collection+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94220A976CC00B024F2 /* Collection+SafeIndex.swift */; };
+		7911E94320A976CC00B024F2 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94220A976CC00B024F2 /* CollectionExtension.swift */; };
 		7911E94820AA0B4E00B024F2 /* MemeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94720AA0B4E00B024F2 /* MemeCollectionViewCell.swift */; };
 		7911E94A20AAFA0600B024F2 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94920AAFA0600B024F2 /* Fonts.swift */; };
 		7911E94C20AB09EC00B024F2 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94B20AB09EC00B024F2 /* Meme.swift */; };
 		791FC35520B6A41000709E6C /* LeagueGothic-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 791FC35320B6A3C400709E6C /* LeagueGothic-Regular.otf */; };
 		791FC35820B6E34900709E6C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79450F61208B34210096D79B /* Info.plist */; };
 		791FC35A20B6E4E200709E6C /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FC35920B6E4E200709E6C /* Colors.swift */; };
-		791FC35C20B95F4000709E6C /* NoMemeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791FC35B20B95F4000709E6C /* NoMemeCollectionViewCell.swift */; };
 		791FC35D20B9633F00709E6C /* LeagueGothic-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 791FC35320B6A3C400709E6C /* LeagueGothic-Regular.otf */; };
+		79380A7D20E3FC760039CCC7 /* ThumbGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7720E3FC750039CCC7 /* ThumbGenerator.swift */; };
+		79380A7E20E3FC760039CCC7 /* CGSize+SizeInPixelForDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7820E3FC750039CCC7 /* CGSize+SizeInPixelForDevice.swift */; };
+		79380A7F20E3FC760039CCC7 /* ImageFitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7920E3FC760039CCC7 /* ImageFitting.swift */; };
+		79380A8020E3FC760039CCC7 /* CGImageSource+getSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7A20E3FC760039CCC7 /* CGImageSource+getSize.swift */; };
+		79380A8120E3FC760039CCC7 /* CGSize+AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7B20E3FC760039CCC7 /* CGSize+AspectRatio.swift */; };
+		79380A8220E3FC760039CCC7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79380A7C20E3FC760039CCC7 /* Constants.swift */; };
 		793D209E20AF436400B80F61 /* MemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D209D20AF436400B80F61 /* MemeView.swift */; };
 		79450F56208B34200096D79B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79450F55208B34200096D79B /* AppDelegate.swift */; };
 		79450F58208B34200096D79B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79450F57208B34200096D79B /* ViewController.swift */; };
@@ -24,6 +29,7 @@
 		79450F60208B34210096D79B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79450F5E208B34210096D79B /* LaunchScreen.storyboard */; };
 		79450F6B208B34210096D79B /* memesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79450F6A208B34210096D79B /* memesTests.swift */; };
 		795B1E7520B02B8A0020C662 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B1E7420B02B8A0020C662 /* DataStore.swift */; };
+		7967059B20D28A7E0059F1AF /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967059A20D28A7E0059F1AF /* UIImageExtension.swift */; };
 		798728BA209B2AEC00595DB8 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798728B9209B2AEC00595DB8 /* ImageProvider.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,13 +45,18 @@
 
 /* Begin PBXFileReference section */
 		7911E94020A7206100B024F2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
-		7911E94220A976CC00B024F2 /* Collection+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+SafeIndex.swift"; sourceTree = "<group>"; };
+		7911E94220A976CC00B024F2 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
 		7911E94720AA0B4E00B024F2 /* MemeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeCollectionViewCell.swift; sourceTree = "<group>"; };
 		7911E94920AAFA0600B024F2 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		7911E94B20AB09EC00B024F2 /* Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
 		791FC35320B6A3C400709E6C /* LeagueGothic-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeagueGothic-Regular.otf"; sourceTree = "<group>"; };
 		791FC35920B6E4E200709E6C /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		791FC35B20B95F4000709E6C /* NoMemeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMemeCollectionViewCell.swift; sourceTree = "<group>"; };
+		79380A7720E3FC750039CCC7 /* ThumbGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbGenerator.swift; sourceTree = "<group>"; };
+		79380A7820E3FC750039CCC7 /* CGSize+SizeInPixelForDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+SizeInPixelForDevice.swift"; sourceTree = "<group>"; };
+		79380A7920E3FC760039CCC7 /* ImageFitting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFitting.swift; sourceTree = "<group>"; };
+		79380A7A20E3FC760039CCC7 /* CGImageSource+getSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImageSource+getSize.swift"; sourceTree = "<group>"; };
+		79380A7B20E3FC760039CCC7 /* CGSize+AspectRatio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+AspectRatio.swift"; sourceTree = "<group>"; };
+		79380A7C20E3FC760039CCC7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		793D209D20AF436400B80F61 /* MemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeView.swift; sourceTree = "<group>"; };
 		79450F52208B34200096D79B /* memes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79450F55208B34200096D79B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +68,7 @@
 		79450F6A208B34210096D79B /* memesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = memesTests.swift; sourceTree = "<group>"; };
 		79450F6C208B34210096D79B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		795B1E7420B02B8A0020C662 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		7967059A20D28A7E0059F1AF /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		798728B9209B2AEC00595DB8 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				7911E94720AA0B4E00B024F2 /* MemeCollectionViewCell.swift */,
-				791FC35B20B95F4000709E6C /* NoMemeCollectionViewCell.swift */,
 				793D209D20AF436400B80F61 /* MemeView.swift */,
 			);
 			path = Views;
@@ -94,6 +105,19 @@
 				791FC35320B6A3C400709E6C /* LeagueGothic-Regular.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		79380A7620E3FC660039CCC7 /* ThumbGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				79380A7A20E3FC760039CCC7 /* CGImageSource+getSize.swift */,
+				79380A7B20E3FC760039CCC7 /* CGSize+AspectRatio.swift */,
+				79380A7820E3FC750039CCC7 /* CGSize+SizeInPixelForDevice.swift */,
+				79380A7C20E3FC760039CCC7 /* Constants.swift */,
+				79380A7920E3FC760039CCC7 /* ImageFitting.swift */,
+				79380A7720E3FC750039CCC7 /* ThumbGenerator.swift */,
+			);
+			path = ThumbGenerator;
 			sourceTree = "<group>";
 		};
 		79450F49208B341F0096D79B = {
@@ -117,8 +141,10 @@
 		79450F54208B34200096D79B /* memes */ = {
 			isa = PBXGroup;
 			children = (
+				79380A7620E3FC660039CCC7 /* ThumbGenerator */,
+				7967059D20D28D2E0059F1AF /* Constants */,
+				7967059C20D28D080059F1AF /* Extensions */,
 				791FC35420B6A3DA00709E6C /* Fonts */,
-				7911E94220A976CC00B024F2 /* Collection+SafeIndex.swift */,
 				795B1E7420B02B8A0020C662 /* DataStore.swift */,
 				7911E94620AA0AF600B024F2 /* Views */,
 				79450F55208B34200096D79B /* AppDelegate.swift */,
@@ -127,8 +153,6 @@
 				79450F5E208B34210096D79B /* LaunchScreen.storyboard */,
 				79450F61208B34210096D79B /* Info.plist */,
 				7911E94020A7206100B024F2 /* EditViewController.swift */,
-				7911E94920AAFA0600B024F2 /* Fonts.swift */,
-				791FC35920B6E4E200709E6C /* Colors.swift */,
 				798728B9209B2AEC00595DB8 /* ImageProvider.swift */,
 				7911E94B20AB09EC00B024F2 /* Meme.swift */,
 			);
@@ -142,6 +166,24 @@
 				79450F6C208B34210096D79B /* Info.plist */,
 			);
 			path = memesTests;
+			sourceTree = "<group>";
+		};
+		7967059C20D28D080059F1AF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7911E94220A976CC00B024F2 /* CollectionExtension.swift */,
+				7967059A20D28A7E0059F1AF /* UIImageExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		7967059D20D28D2E0059F1AF /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				791FC35920B6E4E200709E6C /* Colors.swift */,
+				7911E94920AAFA0600B024F2 /* Fonts.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,15 +292,21 @@
 				7911E94A20AAFA0600B024F2 /* Fonts.swift in Sources */,
 				791FC35A20B6E4E200709E6C /* Colors.swift in Sources */,
 				7911E94120A7206100B024F2 /* EditViewController.swift in Sources */,
+				79380A7E20E3FC760039CCC7 /* CGSize+SizeInPixelForDevice.swift in Sources */,
 				79450F58208B34200096D79B /* ViewController.swift in Sources */,
 				79450F56208B34200096D79B /* AppDelegate.swift in Sources */,
+				79380A8120E3FC760039CCC7 /* CGSize+AspectRatio.swift in Sources */,
+				7967059B20D28A7E0059F1AF /* UIImageExtension.swift in Sources */,
 				795B1E7520B02B8A0020C662 /* DataStore.swift in Sources */,
 				7911E94820AA0B4E00B024F2 /* MemeCollectionViewCell.swift in Sources */,
 				793D209E20AF436400B80F61 /* MemeView.swift in Sources */,
+				79380A8020E3FC760039CCC7 /* CGImageSource+getSize.swift in Sources */,
 				7911E94C20AB09EC00B024F2 /* Meme.swift in Sources */,
-				791FC35C20B95F4000709E6C /* NoMemeCollectionViewCell.swift in Sources */,
 				798728BA209B2AEC00595DB8 /* ImageProvider.swift in Sources */,
-				7911E94320A976CC00B024F2 /* Collection+SafeIndex.swift in Sources */,
+				79380A7F20E3FC760039CCC7 /* ImageFitting.swift in Sources */,
+				7911E94320A976CC00B024F2 /* CollectionExtension.swift in Sources */,
+				79380A7D20E3FC760039CCC7 /* ThumbGenerator.swift in Sources */,
+				79380A8220E3FC760039CCC7 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +465,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = m.memes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mika;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -435,7 +483,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = m.memes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mika;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -6,15 +6,38 @@ class MemeView: UIView, UITextViewDelegate {
     private var bottomTextView: UITextView?
     private let imageView = UIImageView(frame: CGRect.zero)
     private let editable: Bool!
+    
+    private lazy var titleTextView: UITextView = {
+        let textView = UITextView(frame: CGRect.zero)
+        textView.textAlignment = .center
+        textView.backgroundColor = UIColor.clear
+        textView.textColor = UIColor.white
+        textView.textContainer.maximumNumberOfLines = 3
+        textView.textContainer.lineBreakMode = .byWordWrapping
+        textView.font = Fonts.main
+        textView.isEditable = true
+        textView.autocapitalizationType = .allCharacters
+        textView.isScrollEnabled = false
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.sizeToFit()
+        
+        return textView
+    }()
 
     init(meme: Meme, editable: Bool = false) {
         self.meme = meme
         self.editable = editable
         super.init(frame: CGRect.zero)
-    
+        
+        let titleTop = createTitle(at: .top)
+        imageView.addSubview(titleTop)
+        setupTextViewLayout(titleTop, position: .top)
+        
+        let titleBottom = createTitle(at: .bottom)
+        imageView.addSubview(titleBottom)
+        setupTextViewLayout(titleBottom, position: .bottom)
+        
         addImageView()
-        topTextView = addTextView(at: .top)
-        bottomTextView = addTextView(at: .bottom)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,8 +80,8 @@ class MemeView: UIView, UITextViewDelegate {
         }
     }
 
-    private func addTextView(at position:LabelPosition) -> UITextView {
-        let textView = UITextView(frame: CGRect.zero)
+    private func createTitle(at position:LabelPosition) -> UITextView {
+        let textView = titleTextView
         textView.delegate = self
 
         if let txt = position == .top ? meme.topText : meme.bottomText {
@@ -72,30 +95,18 @@ class MemeView: UIView, UITextViewDelegate {
             textView.attributedText = attrStr
         }
 
-        textView.textAlignment = .center
-        textView.backgroundColor = UIColor.clear
-        textView.textColor = UIColor.white
-        textView.textContainer.maximumNumberOfLines = 3
-        textView.textContainer.lineBreakMode = .byWordWrapping
-        textView.font = Fonts.main
-        textView.isEditable = true
-        textView.autocapitalizationType = .allCharacters
-        textView.isScrollEnabled = false
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
-
-        imageView.addSubview(textView)
-
+        return textView
+    }
+    
+    private func setupTextViewLayout(_ textView: UITextView, position: LabelPosition) {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
         textView.widthAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
-
+        
         switch position {
         case .top: textView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
         case .bottom: textView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
         }
-
-        return textView
     }
 }
 

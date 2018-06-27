@@ -54,6 +54,11 @@ struct DataStore {
                 print("Load image_\(i).png")
                 memes[i].image = image
             }
+            
+            if let image = loadSavedImage(named: "thumbnail_\(i).png") {
+                print("Load thumbnail_\(i).png")
+                memes[i].thumbnail = image
+            }
         }
         
         return memes
