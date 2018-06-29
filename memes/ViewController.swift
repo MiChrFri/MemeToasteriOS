@@ -9,15 +9,19 @@ class ViewController: UIViewController {
     var imagePaths:[String] = []
     var memes: [Meme] = []
     let dataStore = DataStore()
+    
+    var memeSize: CGSize!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Memes Galery"
         
-        memes = dataStore.loadMemesWithImages()
+        memes = dataStore.loadMemesWithThumbnails()
         
         addCollectionView()
         setupLayout()
+        
+        memeSize = CGSize(width: UIScreen.main.bounds.width - 32.0, height: UIScreen.main.bounds.width - 32.0)
         
         self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showImagePicker)), animated: true)
     }
@@ -25,19 +29,15 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         
-        DispatchQueue.global(qos: .background).async {
-            let userDefaults = UserDefaults.standard
-            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.memes)
-            userDefaults.set(encodedData, forKey: "memes")
-            userDefaults.synchronize()
-            DispatchQueue.main.async {
-                self.collectionView.reloadSections([0])
-            }
+        if memes.count > 0 {
+            dataStore.saveMemes(self.memes)
+            
+            self.collectionView.reloadSections([0])
         }
     }
     
     @objc private func showImagePicker() {
-        let imagePickerAlert = UIAlertController(title: "Select an Image", message: nil, preferredStyle: .actionSheet)
+        let imagePickerAlert = UIAlertController(title: "Select an Image", message: nil, preferredStyle: .alert)
         
         imagePickerAlert.view.tintColor = Colors.buttonText
         imagePickerAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
@@ -87,13 +87,8 @@ class ViewController: UIViewController {
             let memeId = String(memes.count)
             
             let imageName = "image_\(memeId).png"
-            let thumbName = "thumbnail_\(memeId).png"
             let meme = Meme(id: memeId)
             meme.image = img
-//            meme.thumbnail = img
-
-            self.memes.insert(meme, at: 0)
-            self.collectionView.reloadSections([0])
 
             dataStore.saveImage(image: img, forName: imageName)
             
@@ -103,11 +98,16 @@ class ViewController: UIViewController {
             let imgData: CFData = UIImagePNGRepresentation(img) as! CFData
             let imgSource = CGImageSourceCreateWithData(imgData, nil)
             
-            let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: CGSize(width: 50, height: 50))
+            let ns = CGSize(width: memeSize.width/5, height: memeSize.width/5)
+            let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
+            
+            let thumbName = "thumbnail_\(memeId).png"
+            meme.thumbnail = thumb!
             
             dataStore.saveImage(image: thumb!, forName: thumbName)
-            meme.thumbnail = thumb!
-            dataStore.saveMemes(self.memes)
+            
+            self.memes.insert(meme, at: 0)
+            self.collectionView.reloadSections([0])
         }
     }
 }
@@ -143,10 +143,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = UIScreen.main.bounds.width - 32.0
-        
-        return CGSize(width: width, height: width)
+        return memeSize
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -158,7 +155,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {dismiss(animated:false, completion:nil); return }
         
-        let imageData = UIImageJPEGRepresentation(pickedImage, 0.6)
+        let imageData = UIImageJPEGRepresentation(pickedImage, 0.3)
         dismiss(animated:false, completion: { () in
             self.pickedImage(image: UIImage(data: imageData!))
         })

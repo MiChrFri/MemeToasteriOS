@@ -38,6 +38,13 @@ class EditViewController: UIViewController, UITextViewDelegate {
     }
     
     private func addImageView() {
+        
+        if meme.image == nil {
+            if let image = dataStore.loadSavedImage(named: "image_\(meme.id ?? "").png") {
+                meme.image = image
+            }
+        }
+        
         imageView.image = meme.image
         imageView.isUserInteractionEnabled = true
         view.addSubview(imageView)
@@ -106,12 +113,25 @@ class EditViewController: UIViewController, UITextViewDelegate {
 extension EditViewController {
     @objc func barButtonItemClicked() {
         
+        view.endEditing(true)
+        
         let newSize = CGSize(width: imageView.frame.size.width-80.0, height: imageView.frame.size.height-80.0)
 
         let image = imageView.render(toSize: newSize)
         
-        dataStore.saveImage(image: image, forName: "thumb_\(meme.id ?? "").png")
-        meme.thumbnail = image
+        
+        let thumbGenerator = ThumbGenerator()
+        
+        let imgData: CFData = UIImagePNGRepresentation(image) as! CFData
+        let imgSource = CGImageSourceCreateWithData(imgData, nil)
+        
+        let ns = CGSize(width: 200, height: 200)
+        let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
+        
+        dataStore.saveImage(image: thumb!, forName: "thumbnail_\(meme.id ?? "").png")
+
+        meme.image = image
+        meme.thumbnail = thumb
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {

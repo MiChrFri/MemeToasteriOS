@@ -20,6 +20,7 @@ class MemeCollectionViewCell: UICollectionViewCell {
         if let tn = meme.thumbnail {
             let mv = UIImageView(image: tn)
             contentView.addSubview(mv)
+            mv.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
                 mv.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0),
