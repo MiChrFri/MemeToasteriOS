@@ -62,19 +62,15 @@ class EditViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setupNavigationBar() {
-        title = Const.title
-        
+        title = EditVC.title
         
         saveBtn = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveClicked))
         navigationItem.setRightBarButton(saveBtn, animated: true)
-//
-//        navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveClicked)), animated: true)
     }
     
     private func addImageView() {
-        
         if meme.image == nil, let memeId = meme.id {
-            if let image = imageLoader.get(byName: "image_\(memeId).png") {
+            if let image = imageLoader.get(byName: "\(Images.img)\(memeId)\(Images.pngType)") {
                 meme.image = image
             }
         }
@@ -90,10 +86,10 @@ class EditViewController: UIViewController, UITextViewDelegate {
         imageView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         
-        imageView.layer.shadowColor = Const.Shadow.color
-        imageView.layer.shadowOffset = Const.Shadow.offset
-        imageView.layer.shadowOpacity = Const.Shadow.opacity
-        imageView.layer.shadowRadius = Const.Shadow.radius
+        imageView.layer.shadowColor = EditVC.Shadow.color
+        imageView.layer.shadowOffset = EditVC.Shadow.offset
+        imageView.layer.shadowOpacity = EditVC.Shadow.opacity
+        imageView.layer.shadowRadius = EditVC.Shadow.radius
         imageView.clipsToBounds = false
         imageView.contentMode = UIViewContentMode.scaleAspectFill
         imageView.layer.masksToBounds = true
@@ -161,7 +157,7 @@ extension EditViewController {
         let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
         
         if let memeId = meme.id {
-            dataStore.saveImage(image: thumb!, forName: "thumbnail_\(memeId).png")
+            dataStore.saveImage(image: thumb!, forName: "\(Images.thumb)\(memeId)\(Images.pngType)")
             saveBtn.title = "✓"
         }
 
@@ -213,19 +209,5 @@ extension EditViewController {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.clear
-    }
-}
-
-// CONSTANTS
-extension EditViewController {
-    struct Const {
-        static let title = "Edit"
-        
-        struct Shadow {
-            static let radius:CGFloat = 2.0
-            static let color = UIColor.black.cgColor
-            static let offset = CGSize(width: 2, height: 2)
-            static let opacity:Float = 0.3
-        }
     }
 }

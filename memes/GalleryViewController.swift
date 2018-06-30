@@ -1,12 +1,9 @@
 import UIKit
 
-class ViewController: UIViewController {    
-    let memeCellId = "memecCellId"
-    let noMemeCellId = "noMemecCellId"
+class GalleryViewController: UIViewController {
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     let imageProvider = ImageProvider()
     
-    var imagePaths:[String] = []
     var memes: [Meme] = []
     
     let dataStore = DataStore()
@@ -16,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Galery"
+        self.title = Strings.GalleryVCTitle
         
         memes = memeLoader.getAll()
         
@@ -60,7 +57,7 @@ class ViewController: UIViewController {
     }
     
     func addCollectionView() {
-        collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: memeCellId)
+        collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: Strings.MemeCellId)
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
@@ -87,7 +84,7 @@ class ViewController: UIViewController {
             // TODO: Unique meme id
             let memeId = UUID().uuidString
             
-            let imageName = "image_\(memeId).png"
+            let imageName = "\(Images.Img)\(memeId)\(Images.PngType)"
             let meme = Meme(id: memeId)
             meme.image = img
 
@@ -98,17 +95,9 @@ class ViewController: UIViewController {
             self.navigationController?.pushViewController(editViewController, animated: true)
         }
     }
-    
-    private lazy var deleteButton: UIButton = {
-        let deleteButton = UIButton(frame: CGRect.zero)
-        deleteButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        deleteButton.isUserInteractionEnabled = true
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        return deleteButton
-    }()
 }
 
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if memes.count == 0 {
             let bgImage = UIImageView();
@@ -123,7 +112,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memeCellId, for: indexPath) as! MemeCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Strings.MemeCellId, for: indexPath) as! MemeCollectionViewCell
         
         if let meme = memes[safe: indexPath.row] {
             cell.composeView(withMeme: meme)
@@ -131,12 +120,11 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             cell.tag = indexPath.row
             cell.deleteButton.addTarget(self, action: #selector(removeCell(sender:)), for: .touchUpInside)
         }
-
+        
         return cell
     }
     
     @objc func removeCell(sender: UICollectionViewCell) {
-        print(sender.tag)
         memes.remove(at: sender.tag)
         collectionView.reloadData()
     }
@@ -160,7 +148,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
 }
 
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {dismiss(animated:false, completion:nil); return }
         

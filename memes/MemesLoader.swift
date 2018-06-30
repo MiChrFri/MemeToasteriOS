@@ -1,11 +1,3 @@
-//
-//  MemesLoader.swift
-//  memes
-//
-//  Created by Michael Frick on 30/06/2018.
-//  Copyright © 2018 Michael Frick. All rights reserved.
-//
-
 import Foundation
 
 struct MemesLoader {
@@ -20,7 +12,7 @@ struct MemesLoader {
     private func loadMemesData() -> [Meme]{
         var memes: [Meme] = []
         
-        if let decoded = userDefaults.object(forKey: "memes") as? Data,
+        if let decoded = userDefaults.object(forKey: Files.storageKey) as? Data,
             let decodedMemes = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Meme] {
             memes = decodedMemes
         }
@@ -31,7 +23,7 @@ struct MemesLoader {
     private func loadThumbnails(for memes: [Meme]) -> [Meme] {
         return memes.map({ meme in
             if let memeId = meme.id {
-                meme.thumbnail = imageLoader.get(byName: "thumbnail_\(memeId).png")
+                meme.thumbnail = imageLoader.get(byName: "\(Images.thumb)\(memeId)\(Images.pngType)")
             }
             return meme
         })

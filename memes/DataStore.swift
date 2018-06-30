@@ -1,11 +1,4 @@
-//
-//  DataStore.swift
-//  memes
-//
-//  Created by Michael Frick on 19/05/2018.
-//  Copyright © 2018 Michael Frick. All rights reserved.
-//
-
+import Foundation
 import UIKit
 
 struct DataStore {
@@ -25,7 +18,7 @@ struct DataStore {
     
     func saveMemes(_ memes :[Meme]) {
         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: memes)
-        userDefaults.set(encodedData, forKey: "memes")
+        userDefaults.set(encodedData, forKey: Files.storageKey)
         userDefaults.synchronize()
     }
     

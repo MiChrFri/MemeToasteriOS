@@ -5,7 +5,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let templateGaleryVC = ViewController()
+        let templateGaleryVC = GalleryViewController()
         let navigationController = UINavigationController(rootViewController: templateGaleryVC)
         let textAttributes = [NSAttributedStringKey.foregroundColor: Colors.contrast]
         navigationController.navigationBar.titleTextAttributes = textAttributes

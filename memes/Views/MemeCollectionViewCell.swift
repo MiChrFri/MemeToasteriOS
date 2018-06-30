@@ -32,6 +32,10 @@ class MemeCollectionViewCell: UICollectionViewCell {
     func composeView(withMeme meme: Meme) {
         self.meme = meme
         backgroundColor = UIColor.white
+        
+        self.contentView.layer.borderWidth = 1.0
+        self.contentView.layer.borderColor = Colors.lightGrey.cgColor
+        self.contentView.layer.masksToBounds = true
                 
         if let tn = meme.thumbnail {
             let mv = UIImageView(image: tn)
