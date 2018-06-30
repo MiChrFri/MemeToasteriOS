@@ -16,7 +16,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Memes Galery"
+        self.title = "Galery"
         
         memes = memeLoader.getAll()
         

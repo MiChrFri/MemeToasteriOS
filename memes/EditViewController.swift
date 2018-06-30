@@ -8,6 +8,9 @@ class EditViewController: UIViewController, UITextViewDelegate {
     private let dataStore = DataStore()
     private let imageLoader = ImageLoader()
     
+    
+    private var saveBtn: UIBarButtonItem!
+    
     private let meme: Meme!
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
@@ -60,7 +63,12 @@ class EditViewController: UIViewController, UITextViewDelegate {
     
     private func setupNavigationBar() {
         title = Const.title
-        navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(barButtonItemClicked)), animated: true)
+        
+        
+        saveBtn = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveClicked))
+        navigationItem.setRightBarButton(saveBtn, animated: true)
+//
+//        navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveClicked)), animated: true)
     }
     
     private func addImageView() {
@@ -137,7 +145,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
 
 // HANDLERS
 extension EditViewController {
-    @objc func barButtonItemClicked() {
+    @objc func saveClicked() {
         view.endEditing(true)
         
         let newSize = CGSize(width: imageView.frame.size.width, height: imageView.frame.size.height)
@@ -145,7 +153,7 @@ extension EditViewController {
         let thumbGenerator = ThumbGenerator()
         
         let image = imageView.render(toSize: newSize)
-        let imgData: CFData = UIImagePNGRepresentation(image) as! CFData
+        let imgData: CFData = UIImagePNGRepresentation(image)! as CFData
         let imgSource = CGImageSourceCreateWithData(imgData, nil)
         
         let ns = CGSize(width: newSize.width/DeviceInfo.ScaleFactor, height: newSize.width/DeviceInfo.ScaleFactor)
@@ -154,6 +162,7 @@ extension EditViewController {
         
         if let memeId = meme.id {
             dataStore.saveImage(image: thumb!, forName: "thumbnail_\(memeId).png")
+            saveBtn.title = "✓"
         }
 
         meme.thumbnail = thumb
@@ -187,6 +196,8 @@ extension EditViewController {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
+        self.saveBtn.title = "save"
+        
         if meme.topText == "your text" || meme.bottomText == "your text" {
             textView.text = nil
         }
@@ -208,7 +219,7 @@ extension EditViewController {
 // CONSTANTS
 extension EditViewController {
     struct Const {
-        static let title = "Edit meme"
+        static let title = "Edit"
         
         struct Shadow {
             static let radius:CGFloat = 2.0

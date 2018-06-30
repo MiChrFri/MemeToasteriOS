@@ -17,7 +17,6 @@ struct DataStore {
         do {
             if let imagePath = directory.appendingPathComponent(name) {
                 try data.write(to: imagePath)
-                print("Saved--: \(name)")
             }
         } catch {
             print(error.localizedDescription)
