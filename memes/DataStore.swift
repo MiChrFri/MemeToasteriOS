@@ -15,8 +15,10 @@ struct DataStore {
         guard let data = UIImageJPEGRepresentation(image, 1) ?? UIImagePNGRepresentation(image) else {return}
         guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
         do {
-            try data.write(to: directory.appendingPathComponent(name)!)
-            print("Saved: \(name)")
+            if let imagePath = directory.appendingPathComponent(name) {
+                try data.write(to: imagePath)
+                print("Saved--: \(name)")
+            }
         } catch {
             print(error.localizedDescription)
         }
@@ -50,11 +52,6 @@ struct DataStore {
         var memes = loadSavedMemes()
         
         for i in 0..<memes.count {
-//            if let image = loadSavedImage(named: "image_\(i).png") {
-//                print("Load image_\(i).png")
-//                memes[i].image = image
-//            }
-            
             if let image = loadSavedImage(named: "thumbnail_\(i).png") {
                 memes[i].thumbnail = image
             }

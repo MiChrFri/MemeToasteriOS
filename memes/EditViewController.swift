@@ -30,6 +30,27 @@ class EditViewController: UIViewController, UITextViewDelegate {
         addImageView()
         self.topTextView = addTextView(at: .top)
         self.bottomTextView = addTextView(at: .bottom)
+        
+        
+        let download = UIButton(frame: CGRect.zero)
+        download.backgroundColor = UIColor.green
+        download.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
+        self.view.addSubview(download)
+        
+        download.translatesAutoresizingMaskIntoConstraints = false
+        
+        download.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        download.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        download.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        download.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+    }
+    
+    @objc private func saveImage() {
+        imageView.layoutIfNeeded()
+        let img = imageView.render(toSize: imageView.frame.size)
+
+        UIImageWriteToSavedPhotosAlbum(img, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
     private func setupNavigationBar() {
@@ -40,7 +61,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
     private func addImageView() {
         
         if meme.image == nil {
-            if let image = dataStore.loadSavedImage(named: "image_\(meme.id ?? "").png") {
+            if let image = dataStore.loadSavedImage(named: "image_\(meme.id).png") {
                 meme.image = image
             }
         }
@@ -112,25 +133,24 @@ class EditViewController: UIViewController, UITextViewDelegate {
 // HANDLERS
 extension EditViewController {
     @objc func barButtonItemClicked() {
-        
         view.endEditing(true)
         
         let newSize = CGSize(width: imageView.frame.size.width-80.0, height: imageView.frame.size.height-80.0)
-
-        let image = imageView.render(toSize: newSize)
-        
         
         let thumbGenerator = ThumbGenerator()
         
+        let image = imageView.render(toSize: newSize)
         let imgData: CFData = UIImagePNGRepresentation(image) as! CFData
         let imgSource = CGImageSourceCreateWithData(imgData, nil)
         
-        let ns = CGSize(width: 200, height: 200)
+        let ns = CGSize(width: newSize.width/DeviceInfo.ScaleFactor, height: newSize.width/DeviceInfo.ScaleFactor)
+        
         let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
         
-        dataStore.saveImage(image: thumb!, forName: "thumbnail_\(meme.id ?? "").png")
+        if let memeId = meme.id {
+            dataStore.saveImage(image: thumb!, forName: "thumbnail_\(memeId).png")
+        }
 
-        meme.image = image
         meme.thumbnail = thumb
     }
     
@@ -193,7 +213,3 @@ extension EditViewController {
         }
     }
 }
-
-
-
-

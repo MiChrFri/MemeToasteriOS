@@ -30,7 +30,9 @@ public struct ThumbGenerator {
     private func createThumbImage(imageSource:CGImageSource, maxSize:CGFloat, outputFrameSize: CGSize) -> UIImage? {
         let options = [
             kCGImageSourceThumbnailMaxPixelSize as String : maxSize,
-            kCGImageSourceCreateThumbnailFromImageIfAbsent as String : true
+            kCGImageSourceCreateThumbnailFromImageIfAbsent as String : true,
+            kCGImageSourceCreateThumbnailFromImageAlways as String: true,
+            kCGImageSourceCreateThumbnailWithTransform as String: true
             ] as [String : Any]
         
         
@@ -48,6 +50,7 @@ public struct ThumbGenerator {
             
             if let cgImage = thumbImage.cropping(to: cropRect) {
                 let image = UIImage(cgImage: cgImage)
+ 
                 return image
             }
         }

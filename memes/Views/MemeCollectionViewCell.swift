@@ -26,7 +26,7 @@ class MemeCollectionViewCell: UICollectionViewCell {
                 mv.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0),
                 mv.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10.0),
                 mv.topAnchor.constraint(equalTo: self.topAnchor, constant: 10.0),
-                mv.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50.0),
+               // mv.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50.0),
                 ])
         }
     }

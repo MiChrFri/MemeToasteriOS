@@ -31,7 +31,6 @@ class ViewController: UIViewController {
         
         if memes.count > 0 {
             dataStore.saveMemes(self.memes)
-            
             self.collectionView.reloadSections([0])
         }
     }
@@ -82,32 +81,19 @@ class ViewController: UIViewController {
     
     func pickedImage(image: UIImage?) {
         if let img = image {
-            
+    
             // TODO: Unique meme id
-            let memeId = String(memes.count)
+            let memeId = UUID().uuidString
             
             let imageName = "image_\(memeId).png"
             let meme = Meme(id: memeId)
             meme.image = img
 
-            dataStore.saveImage(image: img, forName: imageName)
-            
-            
-            let thumbGenerator = ThumbGenerator()
-            
-            let imgData: CFData = UIImagePNGRepresentation(img) as! CFData
-            let imgSource = CGImageSourceCreateWithData(imgData, nil)
-            
-            let ns = CGSize(width: memeSize.width/5, height: memeSize.width/5)
-            let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
-            
-            let thumbName = "thumbnail_\(memeId).png"
-            meme.thumbnail = thumb!
-            
-            dataStore.saveImage(image: thumb!, forName: thumbName)
-            
+            dataStore.saveImage(image: img, forName: imageName)            
             self.memes.insert(meme, at: 0)
-            self.collectionView.reloadSections([0])
+            
+            let editViewController = EditViewController(withMeme: meme)
+            self.navigationController?.pushViewController(editViewController, animated: true)
         }
     }
 }
@@ -155,9 +141,8 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {dismiss(animated:false, completion:nil); return }
         
-        let imageData = UIImageJPEGRepresentation(pickedImage, 0.3)
         dismiss(animated:false, completion: { () in
-            self.pickedImage(image: UIImage(data: imageData!))
+            self.pickedImage(image: pickedImage)
         })
     }
 }
