@@ -8,7 +8,9 @@ class ViewController: UIViewController {
     
     var imagePaths:[String] = []
     var memes: [Meme] = []
+    
     let dataStore = DataStore()
+    let memeLoader = MemesLoader()
     
     var memeSize: CGSize!
 
@@ -16,7 +18,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Memes Galery"
         
-        memes = dataStore.loadMemesWithThumbnails()
+        memes = memeLoader.getAll()
         
         addCollectionView()
         setupLayout()

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		790A7CC620E7B310004A8D09 /* MemesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A7CC520E7B310004A8D09 /* MemesLoader.swift */; };
+		790A7CC820E7B34F004A8D09 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A7CC720E7B34F004A8D09 /* ImageLoader.swift */; };
 		7911E94120A7206100B024F2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94020A7206100B024F2 /* EditViewController.swift */; };
 		7911E94320A976CC00B024F2 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94220A976CC00B024F2 /* CollectionExtension.swift */; };
 		7911E94820AA0B4E00B024F2 /* MemeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7911E94720AA0B4E00B024F2 /* MemeCollectionViewCell.swift */; };
@@ -44,6 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		790A7CC520E7B310004A8D09 /* MemesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesLoader.swift; sourceTree = "<group>"; };
+		790A7CC720E7B34F004A8D09 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		7911E94020A7206100B024F2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		7911E94220A976CC00B024F2 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
 		7911E94720AA0B4E00B024F2 /* MemeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -146,6 +150,8 @@
 				7967059C20D28D080059F1AF /* Extensions */,
 				791FC35420B6A3DA00709E6C /* Fonts */,
 				795B1E7420B02B8A0020C662 /* DataStore.swift */,
+				790A7CC720E7B34F004A8D09 /* ImageLoader.swift */,
+				790A7CC520E7B310004A8D09 /* MemesLoader.swift */,
 				7911E94620AA0AF600B024F2 /* Views */,
 				79450F55208B34200096D79B /* AppDelegate.swift */,
 				79450F57208B34200096D79B /* ViewController.swift */,
@@ -291,6 +297,8 @@
 			files = (
 				7911E94A20AAFA0600B024F2 /* Fonts.swift in Sources */,
 				791FC35A20B6E4E200709E6C /* Colors.swift in Sources */,
+				790A7CC820E7B34F004A8D09 /* ImageLoader.swift in Sources */,
+				790A7CC620E7B310004A8D09 /* MemesLoader.swift in Sources */,
 				7911E94120A7206100B024F2 /* EditViewController.swift in Sources */,
 				79380A7E20E3FC760039CCC7 /* CGSize+SizeInPixelForDevice.swift in Sources */,
 				79450F58208B34200096D79B /* ViewController.swift in Sources */,

@@ -30,35 +30,6 @@ struct DataStore {
         userDefaults.synchronize()
     }
     
-    func loadSavedImage(named: String) -> UIImage? {
-        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            return UIImage(contentsOfFile: URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(named).path)
-        }
-        return nil
-    }
-    
-    func loadSavedMemes() -> [Meme]{
-        var memes: [Meme] = []
-        
-        if let decoded = userDefaults.object(forKey: "memes") as? Data,
-            let decodedMemes = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Meme] {
-            memes = decodedMemes
-        }
-        
-        return memes
-    }
-
-    func loadMemesWithThumbnails() -> [Meme] {
-        var memes = loadSavedMemes()
-        
-        for i in 0..<memes.count {
-            if let image = loadSavedImage(named: "thumbnail_\(i).png") {
-                memes[i].thumbnail = image
-            }
-        }
-        
-        return memes
-    }
 }
 
 

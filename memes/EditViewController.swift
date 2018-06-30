@@ -6,6 +6,8 @@ enum LabelPosition {
 
 class EditViewController: UIViewController, UITextViewDelegate {
     private let dataStore = DataStore()
+    private let imageLoader = ImageLoader()
+    
     private let meme: Meme!
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
@@ -61,7 +63,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
     private func addImageView() {
         
         if meme.image == nil {
-            if let image = dataStore.loadSavedImage(named: "image_\(meme.id).png") {
+            if let image = imageLoader.get(byName: "image_\(meme.id).png") {
                 meme.image = image
             }
         }
