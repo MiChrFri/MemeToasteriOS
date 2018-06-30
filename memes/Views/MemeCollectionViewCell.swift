@@ -4,14 +4,30 @@ class MemeCollectionViewCell: UICollectionViewCell {
     private var meme: Meme!
     private let dataStore = DataStore()
     
-    private lazy var memeView: MemeView = {
-        let memeView = MemeView(meme: meme)
-        memeView.isUserInteractionEnabled = false
-        memeView.contentMode = UIViewContentMode.scaleAspectFill
-        memeView.layer.masksToBounds = true
-        memeView.translatesAutoresizingMaskIntoConstraints = false
-        return memeView
+    
+    lazy var infoLabel: UILabel = {
+        let infoLabel = UILabel(frame: CGRect.zero)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm - MMMM d, yyyy"
+        infoLabel.text = dateFormatter.string(from: Date())
+        infoLabel.font = UIFont.systemFont(ofSize: 18.0)
+        infoLabel.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        
+        infoLabel.translatesAutoresizingMaskIntoConstraints = false
+        return infoLabel
     }()
+
+    lazy var deleteButton: UIButton = {
+        let deleteButton = UIButton(frame: CGRect.zero)
+        deleteButton.setTitle("🗑", for: .normal)
+        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 24.0)
+        deleteButton.isUserInteractionEnabled = true
+        
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        return deleteButton
+    }()
+    
     
     func composeView(withMeme meme: Meme) {
         self.meme = meme
@@ -25,11 +41,23 @@ class MemeCollectionViewCell: UICollectionViewCell {
             contentView.addSubview(mv)
             mv.translatesAutoresizingMaskIntoConstraints = false
             
+            contentView.addSubview(infoLabel)
+            contentView.addSubview(deleteButton)
+            
             NSLayoutConstraint.activate([
                 mv.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0),
                 mv.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10.0),
                 mv.topAnchor.constraint(equalTo: self.topAnchor, constant: 10.0),
                 mv.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50.0),
+                
+                infoLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
+                infoLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5.0),
+                infoLabel.heightAnchor.constraint(equalToConstant: 50.0),
+                
+                deleteButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
+                deleteButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5.0),
+                deleteButton.widthAnchor.constraint(equalToConstant: 50.0),
+                deleteButton.heightAnchor.constraint(equalToConstant: 50.0),
                 ])
         }
     }

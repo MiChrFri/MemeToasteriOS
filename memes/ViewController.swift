@@ -98,6 +98,14 @@ class ViewController: UIViewController {
             self.navigationController?.pushViewController(editViewController, animated: true)
         }
     }
+    
+    private lazy var deleteButton: UIButton = {
+        let deleteButton = UIButton(frame: CGRect.zero)
+        deleteButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        deleteButton.isUserInteractionEnabled = true
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        return deleteButton
+    }()
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -119,8 +127,18 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         
         if let meme = memes[safe: indexPath.row] {
             cell.composeView(withMeme: meme)
+            
+            cell.tag = indexPath.row
+            cell.deleteButton.addTarget(self, action: #selector(removeCell(sender:)), for: .touchUpInside)
         }
+
         return cell
+    }
+    
+    @objc func removeCell(sender: UICollectionViewCell) {
+        print(sender.tag)
+        memes.remove(at: sender.tag)
+        collectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
