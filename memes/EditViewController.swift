@@ -34,18 +34,21 @@ class EditViewController: UIViewController, UITextViewDelegate {
         self.bottomTextView = addTextView(at: .bottom)
         
         
-        let download = UIButton(frame: CGRect.zero)
-        download.backgroundColor = UIColor.green
-        download.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
-        self.view.addSubview(download)
+        let saveToImages = UIButton(frame: CGRect.zero)
+        saveToImages.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
+        saveToImages.layer.cornerRadius = 50
+        saveToImages.layer.masksToBounds = true
+        saveToImages.setTitle("📥", for: .normal)
+        saveToImages.titleLabel?.font = UIFont.systemFont(ofSize: 60.0)
+        saveToImages.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
+        self.view.addSubview(saveToImages)
         
-        download.translatesAutoresizingMaskIntoConstraints = false
+        saveToImages.translatesAutoresizingMaskIntoConstraints = false
         
-        download.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        download.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        download.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        download.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
+        saveToImages.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20).isActive = true
+        saveToImages.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        saveToImages.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        saveToImages.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
     
     @objc private func saveImage() {
@@ -62,8 +65,8 @@ class EditViewController: UIViewController, UITextViewDelegate {
     
     private func addImageView() {
         
-        if meme.image == nil {
-            if let image = imageLoader.get(byName: "image_\(meme.id).png") {
+        if meme.image == nil, let memeId = meme.id {
+            if let image = imageLoader.get(byName: "image_\(memeId).png") {
                 meme.image = image
             }
         }
@@ -137,7 +140,7 @@ extension EditViewController {
     @objc func barButtonItemClicked() {
         view.endEditing(true)
         
-        let newSize = CGSize(width: imageView.frame.size.width-80.0, height: imageView.frame.size.height-80.0)
+        let newSize = CGSize(width: imageView.frame.size.width, height: imageView.frame.size.height)
         
         let thumbGenerator = ThumbGenerator()
         

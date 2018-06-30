@@ -131,7 +131,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return memeSize
+        
+        let width = UIScreen.main.bounds.width - 32.0
+        
+        return CGSize(width: width, height: width + 60)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
