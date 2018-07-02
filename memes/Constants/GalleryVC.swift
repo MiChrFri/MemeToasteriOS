@@ -1,6 +1,6 @@
 import UIKit
 
-extension GalleryViewController {
+struct GalleryVC {
     static let title = "Gallery"
     
     struct Shadow {

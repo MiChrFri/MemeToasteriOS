@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>The application needs permission to use the camera...</string>
+	<string>MemeToaster needs access to your camera if you want to use photos to create memes.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Our application needs permission to write photos...</string>
+	<string>MemeToaster needs permission to write to your photo libaray to be able to save your memes there. </string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LeagueGothic-Regular</string>

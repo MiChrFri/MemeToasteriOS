@@ -13,7 +13,7 @@ class GalleryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = Strings.GalleryVCTitle
+        self.title = GalleryVC.title
         
         memes = memeLoader.getAll()
         
@@ -40,7 +40,12 @@ class GalleryViewController: UIViewController {
         imagePickerAlert.view.tintColor = Colors.buttonText
         imagePickerAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
         imagePickerAlert.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
-            self.presentImagePicker(withType: .camera)
+            
+            let permissionsManager = PermissionManager()
+            permissionsManager.delegate = self
+            permissionsManager.handleCameraPermission()
+            
+            
         }))
         imagePickerAlert.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
             self.presentImagePicker(withType: .photoLibrary)
@@ -57,7 +62,7 @@ class GalleryViewController: UIViewController {
     }
     
     func addCollectionView() {
-        collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: Strings.MemeCellId)
+        collectionView.register(MemeCollectionViewCell.self, forCellWithReuseIdentifier: Strings.memeCellId)
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
@@ -84,7 +89,7 @@ class GalleryViewController: UIViewController {
             // TODO: Unique meme id
             let memeId = UUID().uuidString
             
-            let imageName = "\(Images.Img)\(memeId)\(Images.PngType)"
+            let imageName = "\(Images.img)\(memeId)\(Images.pngType)"
             let meme = Meme(id: memeId)
             meme.image = img
 
@@ -112,7 +117,7 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Strings.MemeCellId, for: indexPath) as! MemeCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Strings.memeCellId, for: indexPath) as! MemeCollectionViewCell
         
         if let meme = memes[safe: indexPath.row] {
             cell.composeView(withMeme: meme)
@@ -156,4 +161,26 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
             self.pickedImage(image: pickedImage)
         })
     }
+}
+
+extension GalleryViewController: PermissionManagerDelegate {
+    func cameraUsageGranted() {
+        self.presentImagePicker(withType: .camera)
+    }
+    
+    func cameraUsageDenied() {
+        let app = UIApplication.shared
+        let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+     
+        let errorAlert = UIAlertController(title: "Take photos", message: "Allow MemeToaster to access your camera if you want to take photos. You can change the permissions in your settings and try again", preferredStyle: .alert)
+    
+        errorAlert.view.tintColor = Colors.buttonText
+        errorAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        errorAlert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { (action) in
+            app.open(settingsUrl!, options: [:], completionHandler: nil)
+        }))
+        
+        self.present(errorAlert, animated: true, completion: nil)
+    }
+    
 }
