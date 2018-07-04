@@ -1,8 +1,10 @@
 import UIKit
+import Photos
 
 class GalleryViewController: UIViewController {
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     let imageProvider = ImageProvider()
+    let permissionsManager = PermissionManager()
     
     var memes: [Meme] = []
     
@@ -14,6 +16,9 @@ class GalleryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = GalleryVC.title
+        
+        
+        permissionsManager.delegate = self
         
         memes = memeLoader.getAll()
         
@@ -40,15 +45,10 @@ class GalleryViewController: UIViewController {
         imagePickerAlert.view.tintColor = Colors.buttonText
         imagePickerAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
         imagePickerAlert.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
-            
-            let permissionsManager = PermissionManager()
-            permissionsManager.delegate = self
-            permissionsManager.handleCameraPermission()
-            
-            
+            self.permissionsManager.handleCameraPermission()
         }))
         imagePickerAlert.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
-            self.presentImagePicker(withType: .photoLibrary)
+            self.permissionsManager.handlePhotoLibraryPermission()
         }))
         
         self.present(imagePickerAlert, animated: true, completion: nil)
@@ -85,18 +85,13 @@ class GalleryViewController: UIViewController {
     
     func pickedImage(image: UIImage?) {
         if let img = image {
-    
-            // TODO: Unique meme id
             let memeId = UUID().uuidString
             
-            let imageName = "\(Images.img)\(memeId)\(Images.pngType)"
             let meme = Meme(id: memeId)
             meme.image = img
-
-            dataStore.saveImage(image: img, forName: imageName)            
-            self.memes.insert(meme, at: 0)
             
             let editViewController = EditViewController(withMeme: meme)
+            editViewController.delegate = self
             self.navigationController?.pushViewController(editViewController, animated: true)
         }
     }
@@ -136,6 +131,8 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let editViewController = EditViewController(withMeme: memes[indexPath.row])
+        editViewController.delegate = self
+        
         self.navigationController?.pushViewController(editViewController, animated: true)
     }
     
@@ -164,23 +161,41 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
 }
 
 extension GalleryViewController: PermissionManagerDelegate {
-    func cameraUsageGranted() {
-        self.presentImagePicker(withType: .camera)
+    func allowed(for sourceType: UIImagePickerControllerSourceType) {
+        self.presentImagePicker(withType: sourceType)
     }
     
-    func cameraUsageDenied() {
-        let app = UIApplication.shared
-        let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
-     
-        let errorAlert = UIAlertController(title: "Take photos", message: "Allow MemeToaster to access your camera if you want to take photos. You can change the permissions in your settings and try again", preferredStyle: .alert)
-    
+    func denied(for permissionType: UIImagePickerControllerSourceType) {
+        var alertTitle: String
+        var alertMessage: String
+        
+        switch permissionType {
+        case .camera:
+            alertTitle = "Photos"
+            alertMessage = "Allow MemeToaster to access your camera if you want to take photos. You can change the permissions in your settings and try again"
+        case .photoLibrary, .savedPhotosAlbum:
+            alertTitle = "Photo Library"
+            alertMessage = "Allow MemeToaster to access your photo library if you want load and store photos from it. You can change the permissions in your settings and try again"
+        }
+        
+        let errorAlert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
         errorAlert.view.tintColor = Colors.buttonText
         errorAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
         errorAlert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { (action) in
+            let app = UIApplication.shared
+            let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+            
             app.open(settingsUrl!, options: [:], completionHandler: nil)
         }))
-        
+
         self.present(errorAlert, animated: true, completion: nil)
     }
-    
+}
+
+extension GalleryViewController: EditViewControllerDelegate {
+    func memeSaved(_ meme: Meme) {
+        if !self.memes.contains(where: { $0.id == meme.id }) {
+            self.memes.insert(meme, at: 0)
+        }
+    }
 }

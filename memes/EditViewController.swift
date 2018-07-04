@@ -4,9 +4,16 @@ enum LabelPosition {
     case top, bottom
 }
 
+protocol EditViewControllerDelegate: class {
+    func memeSaved(_ meme: Meme)
+}
+
 class EditViewController: UIViewController, UITextViewDelegate {
+    weak var delegate: EditViewControllerDelegate?
+    
     private let dataStore = DataStore()
     private let imageLoader = ImageLoader()
+    private let permissionManager = PermissionManager()
     
     
     private var saveBtn: UIBarButtonItem!
@@ -25,11 +32,26 @@ class EditViewController: UIViewController, UITextViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private var saveImageButton: UIButton = {
+        let saveImageButton = UIButton(frame: CGRect.zero)
+        saveImageButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
+        saveImageButton.layer.cornerRadius = 50
+        saveImageButton.layer.masksToBounds = true
+        saveImageButton.setTitle("📥", for: .normal)
+        saveImageButton.titleLabel?.font = UIFont.systemFont(ofSize: 60.0)
+        saveImageButton.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
+
+        saveImageButton.translatesAutoresizingMaskIntoConstraints = false
+        return saveImageButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = Colors.background
         view.tintColor = Colors.buttonText
+        
+        permissionManager.delegate = self
         
         setupNavigationBar()
         addImageView()
@@ -37,16 +59,8 @@ class EditViewController: UIViewController, UITextViewDelegate {
         self.bottomTextView = addTextView(at: .bottom)
         
         
-        let saveToImages = UIButton(frame: CGRect.zero)
-        saveToImages.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)
-        saveToImages.layer.cornerRadius = 50
-        saveToImages.layer.masksToBounds = true
-        saveToImages.setTitle("📥", for: .normal)
-        saveToImages.titleLabel?.font = UIFont.systemFont(ofSize: 60.0)
-        saveToImages.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
+        let saveToImages = saveImageButton
         self.view.addSubview(saveToImages)
-        
-        saveToImages.translatesAutoresizingMaskIntoConstraints = false
         
         saveToImages.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20).isActive = true
         saveToImages.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -55,10 +69,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc private func saveImage() {
-        imageView.layoutIfNeeded()
-        let img = imageView.render(toSize: imageView.frame.size)
-
-        UIImageWriteToSavedPhotosAlbum(img, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        permissionManager.handlePhotoLibraryPermission()
     }
     
     private func setupNavigationBar() {
@@ -157,11 +168,15 @@ extension EditViewController {
         let thumb = thumbGenerator.createThumbnail(imageSource: imgSource!, withSize: ns)
         
         if let memeId = meme.id {
-            dataStore.saveImage(image: thumb!, forName: "\(Images.thumb)\(memeId)\(Images.pngType)")
-            saveBtn.title = "✓"
+            if let img = meme.image, let thumb = thumb {
+                dataStore.saveImage(image: img, forName: "\(Images.img)\(memeId)\(Images.pngType)")
+                dataStore.saveImage(image: thumb, forName: "\(Images.thumb)\(memeId)\(Images.pngType)")
+                
+                saveBtn.title = "✓"
+                meme.thumbnail = thumb
+                delegate?.memeSaved(meme)
+            }
         }
-
-        meme.thumbnail = thumb
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {
@@ -210,4 +225,31 @@ extension EditViewController {
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.backgroundColor = UIColor.clear
     }
+}
+
+extension EditViewController: PermissionManagerDelegate {
+    func allowed(for sourceType: UIImagePickerControllerSourceType) {
+        imageView.layoutIfNeeded()
+        let img = imageView.render(toSize: imageView.frame.size)
+        
+        UIImageWriteToSavedPhotosAlbum(img, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    func denied(for sourceType: UIImagePickerControllerSourceType) {
+        let alertTitle = "Photo Library"
+        let alertMessage = "Allow MemeToaster to access your photo library if you want load and store photos from it. You can change the permissions in your settings and try again"
+        
+        let errorAlert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        errorAlert.view.tintColor = Colors.buttonText
+        errorAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        errorAlert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { (action) in
+            let app = UIApplication.shared
+            let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+            
+            app.open(settingsUrl!, options: [:], completionHandler: nil)
+        }))
+        
+        self.present(errorAlert, animated: true, completion: nil)
+    }
+    
 }
