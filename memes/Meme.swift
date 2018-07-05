@@ -8,7 +8,7 @@ class Meme: NSObject, NSCoding {
     var image: UIImage?
     var thumbnail: UIImage?
     
-    init(id: String, created:Date = Date(), topText: String = "your text", bottomText: String = "your text") {
+    init(id: String, created:Date, topText: String = "your text", bottomText: String = "your text") {
         self.id = id
         self.created = created
         self.topText = topText

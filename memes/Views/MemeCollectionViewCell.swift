@@ -10,7 +10,7 @@ class MemeCollectionViewCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm - MMMM d, yyyy"
-        infoLabel.text = dateFormatter.string(from: Date())
+        infoLabel.text = dateFormatter.string(from: meme.created)
         infoLabel.font = UIFont.systemFont(ofSize: 18.0)
         infoLabel.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         

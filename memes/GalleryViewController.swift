@@ -87,7 +87,8 @@ class GalleryViewController: UIViewController {
         if let img = image {
             let memeId = UUID().uuidString
             
-            let meme = Meme(id: memeId)
+            let currentDateTiem = Date()
+            let meme = Meme(id: memeId, created: currentDateTiem)
             meme.image = img
             
             let editViewController = EditViewController(withMeme: meme)
