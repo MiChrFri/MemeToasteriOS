@@ -118,10 +118,50 @@
 		7916A34720E828810096A6E4 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				791FC35420B6A3DA00709E6C /* Fonts */,
+				79450F55208B34200096D79B /* AppDelegate.swift */,
 				79450F5C208B34210096D79B /* Assets.xcassets */,
 				79450F5E208B34210096D79B /* LaunchScreen.storyboard */,
 			);
 			path = Supporting;
+			sourceTree = "<group>";
+		};
+		791F790520EE377E00580BB0 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				7911E94020A7206100B024F2 /* EditViewController.swift */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
+		791F790620EE379D00580BB0 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				79450F57208B34200096D79B /* GalleryViewController.swift */,
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		791F790820EE37F700580BB0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				79380A7620E3FC660039CCC7 /* ThumbGenerator */,
+				7916A34820EA05EA0096A6E4 /* PermissionManager.swift */,
+				795B1E7420B02B8A0020C662 /* DataStore.swift */,
+				790A7CC720E7B34F004A8D09 /* ImageLoader.swift */,
+				790A7CC520E7B310004A8D09 /* MemesLoader.swift */,
+				798728B9209B2AEC00595DB8 /* ImageProvider.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		791F790920EE382500580BB0 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				791F790620EE379D00580BB0 /* Gallery */,
+				791F790520EE377E00580BB0 /* Edit */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		791FC35420B6A3DA00709E6C /* Fonts */ = {
@@ -166,22 +206,14 @@
 		79450F54208B34200096D79B /* memes */ = {
 			isa = PBXGroup;
 			children = (
-				7916A34820EA05EA0096A6E4 /* PermissionManager.swift */,
 				79450F61208B34210096D79B /* Info.plist */,
+				7911E94B20AB09EC00B024F2 /* Meme.swift */,
+				791F790820EE37F700580BB0 /* Services */,
 				7916A34720E828810096A6E4 /* Supporting */,
-				79380A7620E3FC660039CCC7 /* ThumbGenerator */,
 				7967059D20D28D2E0059F1AF /* Constants */,
 				7967059C20D28D080059F1AF /* Extensions */,
-				791FC35420B6A3DA00709E6C /* Fonts */,
-				795B1E7420B02B8A0020C662 /* DataStore.swift */,
-				790A7CC720E7B34F004A8D09 /* ImageLoader.swift */,
-				790A7CC520E7B310004A8D09 /* MemesLoader.swift */,
 				7911E94620AA0AF600B024F2 /* Views */,
-				79450F55208B34200096D79B /* AppDelegate.swift */,
-				79450F57208B34200096D79B /* GalleryViewController.swift */,
-				7911E94020A7206100B024F2 /* EditViewController.swift */,
-				798728B9209B2AEC00595DB8 /* ImageProvider.swift */,
-				7911E94B20AB09EC00B024F2 /* Meme.swift */,
+				791F790920EE382500580BB0 /* Screens */,
 			);
 			path = memes;
 			sourceTree = "<group>";

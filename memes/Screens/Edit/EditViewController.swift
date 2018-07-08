@@ -15,9 +15,7 @@ class EditViewController: UIViewController, UITextViewDelegate {
     private let imageLoader = ImageLoader()
     private let permissionManager = PermissionManager()
     
-    
     private var saveBtn: UIBarButtonItem!
-    
     private let meme: Meme!
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
@@ -57,7 +55,6 @@ class EditViewController: UIViewController, UITextViewDelegate {
         addImageView()
         self.topTextView = addTextView(at: .top)
         self.bottomTextView = addTextView(at: .bottom)
-        
         
         let saveToImages = saveImageButton
         self.view.addSubview(saveToImages)

@@ -4,7 +4,6 @@ class MemeView: UIView, UITextViewDelegate {
     private let meme: Meme!
     private var topTextView: UITextView?
     private var bottomTextView: UITextView?
-    private let imageView = UIImageView(frame: CGRect.zero)
     private let editable: Bool!
     
     private lazy var titleTextView: UITextView = {
@@ -18,10 +17,21 @@ class MemeView: UIView, UITextViewDelegate {
         textView.isEditable = true
         textView.autocapitalizationType = .allCharacters
         textView.isScrollEnabled = false
-        textView.translatesAutoresizingMaskIntoConstraints = true
         textView.sizeToFit()
         
+        textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
+    }()
+    
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView(frame: CGRect.zero)
+        imageView.image = meme.image
+        imageView.contentMode = UIViewContentMode.scaleAspectFill
+        imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = editable
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     init(meme: Meme, editable: Bool = false) {
@@ -38,6 +48,8 @@ class MemeView: UIView, UITextViewDelegate {
         setupTextViewLayout(titleBottom, position: .bottom)
         
         addImageView()
+        
+        setupLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,26 +58,9 @@ class MemeView: UIView, UITextViewDelegate {
     
     private func addImageView() {
         imageView.image = meme.image
-    
-        imageView.isUserInteractionEnabled = editable
-        self.addSubview(imageView)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        imageView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-
-        imageView.layer.shadowColor = Const.Shadow.color
-        imageView.layer.shadowOffset = Const.Shadow.offset
-        imageView.layer.shadowOpacity = Const.Shadow.opacity
-        imageView.layer.shadowRadius = Const.Shadow.radius
-        imageView.clipsToBounds = false
-        imageView.contentMode = UIViewContentMode.scaleAspectFill
-        imageView.layer.masksToBounds = true
-
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(sender:)))
         imageView.addGestureRecognizer(tap)
+        self.addSubview(imageView)
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer? = nil) {
@@ -98,25 +93,25 @@ class MemeView: UIView, UITextViewDelegate {
         return textView
     }
     
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            imageView.rightAnchor.constraint(equalTo: self.rightAnchor)
+        ])
+    }
+    
     private func setupTextViewLayout(_ textView: UITextView, position: LabelPosition) {
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
-        textView.widthAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+        
+        NSLayoutConstraint.activate([
+            textView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            textView.widthAnchor.constraint(equalTo: imageView.widthAnchor)
+        ])
         
         switch position {
         case .top: textView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
         case .bottom: textView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
-        }
-    }
-}
-
-extension MemeView {
-    struct Const {
-        struct Shadow {
-            static let radius:CGFloat = 2.0
-            static let color = UIColor.black.cgColor
-            static let offset = CGSize(width: 2, height: 2)
-            static let opacity:Float = 0.3
         }
     }
 }

@@ -1,17 +1,19 @@
 import UIKit
 
 class MemeCollectionViewCell: UICollectionViewCell {
+    private let dateFormat = "HH:mm - MMMM d, yyyy"
+    private let labelFont = UIFont.systemFont(ofSize: 24.0)
+    
     private var meme: Meme!
     private let dataStore = DataStore()
-    
     
     lazy var infoLabel: UILabel = {
         let infoLabel = UILabel(frame: CGRect.zero)
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm - MMMM d, yyyy"
+        dateFormatter.dateFormat = dateFormat
         infoLabel.text = dateFormatter.string(from: meme.created)
-        infoLabel.font = UIFont.systemFont(ofSize: 18.0)
+        infoLabel.font = labelFont
         infoLabel.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -21,7 +23,7 @@ class MemeCollectionViewCell: UICollectionViewCell {
     lazy var deleteButton: UIButton = {
         let deleteButton = UIButton(frame: CGRect.zero)
         deleteButton.setTitle("🗑", for: .normal)
-        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 24.0)
+        deleteButton.titleLabel?.font = labelFont
         deleteButton.isUserInteractionEnabled = true
         
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +50,7 @@ class MemeCollectionViewCell: UICollectionViewCell {
             contentView.addSubview(infoLabel)
             contentView.addSubview(deleteButton)
             
+            //TODO: magic numbers 
             NSLayoutConstraint.activate([
                 mv.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0),
                 mv.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10.0),

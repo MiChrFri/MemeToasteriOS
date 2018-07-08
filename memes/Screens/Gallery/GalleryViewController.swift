@@ -17,7 +17,6 @@ class GalleryViewController: UIViewController {
         super.viewDidLoad()
         self.title = GalleryVC.title
         
-        
         permissionsManager.delegate = self
         
         memes = memeLoader.getAll()
